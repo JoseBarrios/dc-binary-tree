@@ -9,6 +9,30 @@ class BinaryTree{
     this.root = new BinaryTreeNode(value);
   }
 
+  insertLeft(value){
+    this.appendChildNode(value, 'left', this.root);
+  }
+
+  insertRight(value){
+    this.appendChildNode(value, 'right', this.root);
+  }
+
+  appendChildNode(value, position, parentNode){
+    position = position.toUpperCase();
+    switch(position){
+      case 'LEFT':
+        parentNode.insertLeft(value);
+        return parentNode.left;
+        break;
+      case 'RIGHT':
+        parentNode.insertRight(value);
+        return parentNode.right;
+        break;
+      default:
+        this.Error(`Invalid position ${position}, arg must be 'left' or 'right'`);
+    }
+  }
+
 
   singlyLinkedSiblings(){
     var levelOrderNodes = this.BSFWithLevelDelimiter(null);

@@ -6,11 +6,13 @@ var assert = require('assert');
  *  https://en.wikipedia.org/wiki/Tree_traversal
  */
 var testTree = new BinaryTree('F')
-testTree.root.insertLeft('B');
+//testTree.root.insertLeft('B');//DEPRECATED
+testTree.appendChildNode('B', 'left', testTree.root);
 testTree.root.left.insertLeft('A');
 testTree.root.left.insertRight('D');
 testTree.root.left.right.insertLeft('C');
 testTree.root.left.right.insertRight('E');
+//testTree.insertRight('G');//DEPRECATED
 testTree.root.insertRight('G');
 testTree.root.right.insertRight('I');
 testTree.root.right.right.insertLeft('H');
