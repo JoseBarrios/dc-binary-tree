@@ -1,3 +1,5 @@
+'use strict'
+
 var BinaryTree = require('../index.js');
 var assert = require('assert');
 
@@ -6,16 +8,14 @@ var assert = require('assert');
  *  https://en.wikipedia.org/wiki/Tree_traversal
  */
 var testTree = new BinaryTree('F')
-//testTree.root.insertLeft('B');//DEPRECATED
-testTree.appendChildNode('B', 'left', testTree.root);
-testTree.root.left.insertLeft('A');
-testTree.root.left.insertRight('D');
-testTree.root.left.right.insertLeft('C');
-testTree.root.left.right.insertRight('E');
-//testTree.insertRight('G');//DEPRECATED
-testTree.root.insertRight('G');
-testTree.root.right.insertRight('I');
-testTree.root.right.right.insertLeft('H');
+let bNode = testTree.appendChildNode('B', 'left', testTree.root);
+let aNode = testTree.appendChildNode('A', 'left', bNode);
+let dNode = testTree.appendChildNode('D', 'right', bNode);
+let cNode = testTree.appendChildNode('C', 'left', dNode);
+let eNode = testTree.appendChildNode('E', 'right', dNode);
+let gNode = testTree.appendChildNode('G', 'right', testTree.root);
+let iNode = testTree.appendChildNode('I', 'right', gNode);
+let hNode = testTree.appendChildNode('H', 'left', iNode);
 
 //Correct outputs
 const CORRECT_DSF_PREORDER = ['F','B','A','D','C','E','G','I','H'];
