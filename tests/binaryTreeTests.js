@@ -8,7 +8,7 @@ var assert = require('assert');
                  F
               B     G
             A   D     I
-               C E     H
+               C E  H
  */
 var alphabetTree = new BinaryTree('F')
 let bNode = alphabetTree.insert('B', 'left', alphabetTree.root);
