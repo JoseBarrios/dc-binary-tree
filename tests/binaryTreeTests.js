@@ -25,30 +25,51 @@ const CORRECT_A_PATH = ['F','B'];
 const CORRECT_E_PATH = ['F','B','D'];
 const CORRECT_H_PATH = ['F','G','I'];
 const CORRECT_LEAF_DEPTHS = [ 2, 3, 3, 3 ];
-const CORRECT_BSF = ['F','B','G','A','D','I','C','E','H'];
-const CORRECT_DSF_PREORDER = ['F','B','A','D','C','E','G','I','H'];
-const CORRECT_DSF_INORDER = ['A','B','C','D','E','F','G','H','I'];
-const CORRECT_DSF_POSTORDER = ['A','C','E','D','B','H','I','G','F'];
+const CORRECT_BFS = ['F','B','G','A','D','I','C','E','H'];
+const CORRECT_DFS_PREORDER = ['F','B','A','D','C','E','G','I','H'];
+const CORRECT_DFS_INORDER = ['A','B','C','D','E','F','G','H','I'];
+const CORRECT_DFS_POSTORDER = ['A','C','E','D','B','H','I','G','F'];
+const CORRECT_MAX_DEPTH = 3;
+const CORRECT_ARRAY = ['F',null,'B','G', null, 'A','D','I',null,'C','E','H',null];
 
 
 describe('BinaryTree', function() {
 
-  describe('#DSF()', function() {
+  describe('#DFS()', function() {
     it('should return an array of pre-ordered node values', function() {
-      assert.deepStrictEqual(alphabetTree.DSF('PREORDER'),CORRECT_DSF_PREORDER);
+      assert.deepStrictEqual(alphabetTree.DFS('PREORDER'),CORRECT_DFS_PREORDER);
     });
     it('should return an array of in-ordered node values', function() {
-      assert.deepStrictEqual(alphabetTree.DSF(),CORRECT_DSF_INORDER);
-      assert.deepStrictEqual(alphabetTree.DSF('INORDER'),CORRECT_DSF_INORDER);
+      assert.deepStrictEqual(alphabetTree.DFS(),CORRECT_DFS_INORDER);
+      assert.deepStrictEqual(alphabetTree.DFS('INORDER'),CORRECT_DFS_INORDER);
     });
     it('should return an array of post-ordered node values', function() {
-      assert.deepStrictEqual(alphabetTree.DSF('POSTORDER'),CORRECT_DSF_POSTORDER);
+      assert.deepStrictEqual(alphabetTree.DFS('POSTORDER'),CORRECT_DFS_POSTORDER);
     });
   });
 
-  describe('#BSF()', function() {
+  describe('#BFS()', function() {
     it('should return an array of node values by breath order', function() {
-      assert.deepStrictEqual(alphabetTree.BSF(),CORRECT_BSF);
+      assert.deepStrictEqual(alphabetTree.BFS(),CORRECT_BFS);
+    });
+  });
+
+  describe('#toArray()', function() {
+    it('should return an array representation of the binary tree', function() {
+      assert.deepStrictEqual(alphabetTree.toArray(), CORRECT_ARRAY);
+    });
+  });
+
+
+  describe('#getLeafDepths()', function() {
+    it('should return an array of leaf depths', function() {
+      assert.deepStrictEqual(alphabetTree.getLeafDepths(), CORRECT_LEAF_DEPTHS);
+    });
+  });
+
+  describe('#getMaxDepth()', function() {
+    it('should return the level of the deepest leaf', function() {
+      assert.deepStrictEqual(alphabetTree.getMaxDepth(),CORRECT_MAX_DEPTH);
     });
   });
 
@@ -70,10 +91,5 @@ describe('BinaryTree', function() {
     });
   });
 
-  describe('#getLeafDepths()', function() {
-    it('should return an array of leaf depths', function() {
-      assert.deepStrictEqual(alphabetTree.getLeafDepths(), CORRECT_LEAF_DEPTHS);
-    });
-  });
 });
 

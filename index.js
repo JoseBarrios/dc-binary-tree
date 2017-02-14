@@ -9,12 +9,12 @@ class BinaryTree{
     this.root = new BinaryTreeNode(value);
   }
 
-  static print(stack){
-    var values = [];
-    stack.forEach(function(node){
-      values.push(node.value);
-    })
-    console.log(values);
+  static stringify(stack){
+    let array = [];
+    for(let i=0; i < stack.length; i++){
+      array[i] = stack[i].value
+    }
+    return array.toString();;
   }
 
   getNodeByValue(targetValue, nthMatch){
@@ -56,26 +56,52 @@ class BinaryTree{
     }
   }
 
+  toArray(delimiter){
+    delimiter = delimiter || null;
+    let array = [];
+    let queue = [];
+    let level = 0;
 
-  BSF(){
+    queue.push(this.root);
+    while(queue.length){
+      let nodesInLevel = queue.length;
+      while(nodesInLevel){
+        let currentNode = queue.shift();
+        array.push(currentNode.value);
+        if(currentNode.left){ queue.push(currentNode.left) }
+        if(currentNode.right){ queue.push(currentNode.right); }
+        nodesInLevel--;
+      }
+      array.push(null);
+      level++;
+    }
+    return array;
+  }
+
+
+  //Also known as Level Order Transversal
+  BFS(){
     var stack = [];
     var queue = [];
+    let depth = 0;
     queue.push(this.root);
 
     while(queue.length){
-      //Dequeue node at index 0 (remove from queue)
-      var currentNode = queue.shift();
-      //Add value to stack
-      stack.push(currentNode.value);
-      //Enqueue children (add to queue)
-      if(currentNode.left){ queue.push(currentNode.left) }
-      if(currentNode.right){ queue.push(currentNode.right); }
+      let level = queue.length;
+      while(level){
+        var currentNode = queue.shift();
+        stack.push(currentNode.value);
+        if(currentNode.left){ queue.push(currentNode.left) }
+        if(currentNode.right){ queue.push(currentNode.right); }
+        level--;
+      }
+      depth++;
     }
     return stack;
   }
 
 
-  DSF(transversalOrder){
+  DFS(transversalOrder){
     //Most efficient for duplicating trees
     const PRE = 'PREORDER';
     //Most commonly used for binary search trees (due to order)
@@ -96,7 +122,7 @@ class BinaryTree{
     invalidInput = invalidInput && transversalOrder !== POST;
     //If transversal transversalOrder arg is not a string, use default order
     if(invalidInput){
-      console.warn(`BinaryTree.DSF() argument must be a string of value
+      console.warn(`BinaryTree.DFS() argument must be a string of value
       'PREORDER', 'INORDER', or 'POSTORDER'. You passed '${transversalOrder}'.
       Defaulting to '${DEFAULT}'`);
       transversalOrder = DEFAULT;
@@ -108,13 +134,10 @@ class BinaryTree{
     //////////
     function search(node){
       if(node === null) return;
-      //PRE: If node is not null, push value to order
       if(transversalOrder === PRE){ order.push(node.value); }
       if(node.left){ search(node.left) }
-      //IN: If we've reached leftmost leaf, push value to order
       if(transversalOrder === IN){ order.push(node.value); }
       if(node.right){ search(node.right) }
-      //POST: If we've reached left or rightmost leaf, push value to order
       if(transversalOrder === POST){ order.push(node.value); }
     }
     search(this.root);
@@ -124,16 +147,28 @@ class BinaryTree{
 
   getLeafDepths(){
     var depths = [];
-    function search(node, depth){
-      if(node === null) return;
-      if(!node.left && !node.right){ depths.push(depth); }
-      if(node.left){ search(node.left, depth+1) }
-      if(node.right){ search(node.right, depth+1) }
+    function getDepth(node, level){
+      if(node.left){ getDepth(node.left, level+1) }
+      //In-order nodes: gets smallest items in binary tree
+      if(node.right){ getDepth(node.right, level+1) }
+      //Leafs and pruned leafs only: this can include parents, if prev pruned
+      if(!node.left && !node.right){ depths.push(level); }
     }
-    search(this.root, 0);
+    getDepth(this.root, 0);
     return depths;
   }
 
+  getMaxDepth(){
+    let maxDepth = 0;
+    let currentDepth = 0;
+    function depth(node, level){
+      if(node.left){ depth(node.left, level+1) }
+      if(node.right){ depth(node.right, level+1) }
+      maxDepth = Math.max(level, maxDepth);
+      return maxDepth;
+    }
+    return depth(this.root, 0);
+  }
 
   findPathToNode(target){
     var ancestors = [];
@@ -234,38 +269,6 @@ class BinaryTree{
   }
 
 
-  /////////////////////////////
-  // CONSIDERING REMOVING THESE
-  // //////////////////////////
-  singlyLinkedSiblings(){
-    var levelOrderNodes = this.BSFWithLevelDelimiter(null);
-    for(var i = 0; i < levelOrderNodes.length-1; i++){
-      if(levelOrderNodes[i] !== null){
-        levelOrderNodes[i].next = levelOrderNodes[i+1];
-      }
-    }
-    return levelOrderNodes;
-  }
-
-
-  BSFWithLevelDelimiter(delimiter){
-    var delimiter = delimiter || null;
-    var nodes = [];
-    var queue = [];
-    queue.push(this);
-    while(queue.length){
-      var levels = queue.length;
-      while(levels > 0){
-        var currentNode = queue.shift();
-        nodes.push(currentNode);
-        if(currentNode.left){ queue.push(currentNode.left) }
-        if(currentNode.right){ queue.push(currentNode.right); }
-        levels--;
-      }
-      nodes.push(delimiter)
-    }
-    return nodes;
-  }
 }
 
 module.exports = BinaryTree;
