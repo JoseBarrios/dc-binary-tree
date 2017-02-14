@@ -39,13 +39,16 @@ describe('BinaryTree', function() {
   describe('#DFS()', function() {
     it('should return an array of pre-ordered node values', function() {
       assert.deepStrictEqual(alphabetTree.DFS('PREORDER'),CORRECT_DFS_PREORDER);
+      assert.deepStrictEqual(alphabetTree.preOrder(),CORRECT_DFS_PREORDER);
     });
     it('should return an array of in-ordered node values', function() {
       assert.deepStrictEqual(alphabetTree.DFS(),CORRECT_DFS_INORDER);
       assert.deepStrictEqual(alphabetTree.DFS('INORDER'),CORRECT_DFS_INORDER);
+      assert.deepStrictEqual(alphabetTree.inOrder(),CORRECT_DFS_INORDER);
     });
     it('should return an array of post-ordered node values', function() {
       assert.deepStrictEqual(alphabetTree.DFS('POSTORDER'),CORRECT_DFS_POSTORDER);
+      assert.deepStrictEqual(alphabetTree.postOrder(),CORRECT_DFS_POSTORDER);
     });
   });
 

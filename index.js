@@ -85,10 +85,9 @@ class BinaryTree{
     return stack;
   }
 
-  preOrder(){ this.DSF('PREORDER')}
-  inOrder(){ this.DSF('INORDER')}
-  postOrder(){ this.DSF('POSTORDER')}
-
+  preOrder(){ this.DFS('PREORDER')}
+  inOrder(){ this.DFS('INORDER')}
+  postOrder(){ this.DFS('POSTORDER')}
 
   DFS(transversalOrder){
     //Most efficient for duplicating trees
