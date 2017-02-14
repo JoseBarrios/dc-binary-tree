@@ -9,38 +9,22 @@ class BinaryTree{
     this.root = new BinaryTreeNode(value);
   }
 
-  static stringify(stack){
-    let array = [];
-    for(let i=0; i < stack.length; i++){
-      array[i] = stack[i].value
-    }
-    return array.toString();;
-  }
 
-  getNodeByValue(targetValue, nthMatch){
-    nthMatch = nthMatch  || 1;
+
+  getNode(targetValue){
     let targetNode = null;
-    let currentMatches = 0;
-
-    function search(node, value){
-      if(!node)return false;
-      let isMatch = node.value === value;
-      currentMatches += isMatch? 1 : 0;
-      let isNthMatch = currentMatches === nthMatch;
-      if(isMatch && isNthMatch){
-        targetNode = node;
-        return true;
-      }
-      if(search(node.left, value) || search(node.right, value)){
-        return true;
-      }
+    //Uses pre-order transversal
+    function search(node){
+      if(node.value === targetValue){ targetNode = node; }
+      if(node.left && !targetNode){ search(node.left) };
+      if(node.right && !targetNode){ search(node.right) };
     }
-    search(this.root, targetValue)
+    search(this.root)
     return targetNode;
   }
 
 
-  appendChildNode(value, position, parentNode){
+  insert(value, position, parentNode){
     const DEFAULT_LEAF_POSITION = 'LEFT';
     position = position.toUpperCase() || DEFAULT_LEAF_POSITION;
     parentNode = parentNode || this.root;
@@ -55,6 +39,7 @@ class BinaryTree{
         console.error(`Invalid position ${position}, arg must be 'left' or 'right'`);
     }
   }
+
 
   toArray(delimiter){
     delimiter = delimiter || null;
@@ -170,39 +155,16 @@ class BinaryTree{
     return depth(this.root, 0);
   }
 
-  findPathToNode(target){
+
+  //Finds the path to the value provided.
+  getPathTo(value, search){
     var ancestors = [];
-    function search(node, target){
-      if(!node)return false;
-      let nodeString = JSON.stringify(node);
-      let targetString = JSON.stringify(target);
-      let deepMatch = nodeString === targetString;
-      if(deepMatch){ return true; }
-      if(search(node.left, target) || search(node.right, target)){
-        ancestors.unshift(node.value);
-        return true;
-      }
-    }
-    search(this.root, target)
-
-    return ancestors.length? ancestors : null;
-  }
-
-
-  //Finds the path to the value provided. If there are multiple values that
-  //match the criteria, the shortest path is returned unless specified in nthMatch
-  findPathToValue(value, nthMatch){
-    var ancestors = [];
-    nthMatch = nthMatch  || 1;
-    let currentMatches = 0;
     function search(node){
-      //Null nodes cannot be target, return false
-      if(!node)return false;
+      //Null nodes cannot be the target, return false
+      if(!node){ return false; }
 
       let isMatch = node.value === value;
-      if(isMatch){ currentMatches++; }
-      let isTarget = isMatch && currentMatches === nthMatch;
-      if(isTarget){ return true; }
+      if(isMatch){ return true; }
 
       //If current node's left/right is target value
       if(search(node.left) || search(node.right)){
@@ -216,43 +178,34 @@ class BinaryTree{
   }
 
 
-  getLeastCommonAncester(a, b){
+  getLCA(a, b){
     //Check that both a and b exist
-    if(this.findPath(a) && this.findPath(b)){
+    if(this.getPathTo(a) && this.getPathTo(b)){
       //Iterate in pre-order, searching for a and b
       function search(node, a, b){
-        //////////////////////
-        // SEARCH RESULTS  //
-        ////////////////////
         //If incorrect input, return null
         if(!node || !a || !b){ return null }
         //If a or b is found, return node reference
         if(a === node.value || b === node.value){ return node; }
 
-        ////////////////////////////
-        // PRE-ORDER TRASVERSAL  //
-        //////////////////////////
-        //Recurse LEFT nodes (first) until you find a or b
+        // PRE-ORDER TRASVERSAL
         var left = search(node.left, a, b);
-        //Recurse RIGHT nodes (when no lefts) until you find a or b
         var right = search(node.right, a, b);
 
-        //////////////
-        // RESULT  //
-        ////////////
+        //RESULT
         //If both left and right found, nodes are in separate branches
         if(left && right){ return node; }
         //Otherwise, check if left/right subtree is LCA
         return left? left : right;
       }
-      return search(this, a, b).value;
+      return search(this.root, a, b).value;
     }
     else {return null}
   }
 
 
   reverse(){
-    var reversedTree = new BinaryTreeNode(this.value);
+    var reversedTree = new BinaryTree(this.root.value);
     function search(node, reversedNode){
       if(node === null){return null}
       if(node.left){
@@ -264,10 +217,9 @@ class BinaryTree{
         search(node.right, reversedNode.left)
       }
     }
-    search(this, reversedTree);
+    search(this.root, reversedTree.root);
     return reversedTree;
   }
-
 
 }
 

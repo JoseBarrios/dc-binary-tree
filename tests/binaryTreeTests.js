@@ -11,14 +11,14 @@ var assert = require('assert');
                C E     H
  */
 var alphabetTree = new BinaryTree('F')
-let bNode = alphabetTree.appendChildNode('B', 'left', alphabetTree.root);
-let aNode = alphabetTree.appendChildNode('A', 'left', bNode);
-let dNode = alphabetTree.appendChildNode('D', 'right', bNode);
-let cNode = alphabetTree.appendChildNode('C', 'left', dNode);
-let eNode = alphabetTree.appendChildNode('E', 'right', dNode);
-let gNode = alphabetTree.appendChildNode('G', 'right', alphabetTree.root);
-let iNode = alphabetTree.appendChildNode('I', 'right', gNode);
-let hNode = alphabetTree.appendChildNode('H', 'left', iNode);
+let bNode = alphabetTree.insert('B', 'left', alphabetTree.root);
+let aNode = alphabetTree.insert('A', 'left', bNode);
+let dNode = alphabetTree.insert('D', 'right', bNode);
+let cNode = alphabetTree.insert('C', 'left', dNode);
+let eNode = alphabetTree.insert('E', 'right', dNode);
+let gNode = alphabetTree.insert('G', 'right', alphabetTree.root);
+let iNode = alphabetTree.insert('I', 'right', gNode);
+let hNode = alphabetTree.insert('H', 'left', iNode);
 
 //Correct outputs
 const CORRECT_A_PATH = ['F','B'];
@@ -31,6 +31,7 @@ const CORRECT_DFS_INORDER = ['A','B','C','D','E','F','G','H','I'];
 const CORRECT_DFS_POSTORDER = ['A','C','E','D','B','H','I','G','F'];
 const CORRECT_MAX_DEPTH = 3;
 const CORRECT_ARRAY = ['F',null,'B','G', null, 'A','D','I',null,'C','E','H',null];
+const CORRECT_REVERSE = ['F',null,'G','B',null,'I','D','A',null,'H','E','C',null]
 
 
 describe('BinaryTree', function() {
@@ -73,21 +74,29 @@ describe('BinaryTree', function() {
     });
   });
 
-  describe('#getNodeByValue()', function() {
+  describe('#getNode()', function() {
     it('should return the first instance of the node with matching value', function() {
-      assert.deepStrictEqual(alphabetTree.getNodeByValue('A'), aNode );
+      assert.deepStrictEqual(alphabetTree.getNode('A'), aNode );
+      assert.deepStrictEqual(alphabetTree.getNode('H'), hNode );
     });
   });
 
-  describe('#findPathToValue()', function() {
+  describe('#pathTo()', function() {
     it('should return the path to the passed value', function() {
-      assert.deepStrictEqual(alphabetTree.findPathToValue('A'),CORRECT_A_PATH);
+      assert.deepStrictEqual(alphabetTree.getPathTo('A'),CORRECT_A_PATH);
     });
   });
 
-  describe('#findPathToNode()', function() {
-    it('should return the path to the passed value', function() {
-      assert.deepStrictEqual(alphabetTree.findPathToNode(aNode),CORRECT_A_PATH);
+  describe('#getLCA()', function() {
+    it('should return the Least Common Ancester (LCA) of two nodes', function() {
+      assert.deepStrictEqual(alphabetTree.getLCA('A', 'E'), 'B');
+    });
+  });
+
+  describe('#reverse()', function() {
+    it('should return the reverse of the tree', function() {
+      //TODO: Get rid of #toArray dependency, create the reverse tree
+      assert.deepStrictEqual(alphabetTree.reverse().toArray(), CORRECT_REVERSE);
     });
   });
 
