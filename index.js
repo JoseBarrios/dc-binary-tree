@@ -1,12 +1,14 @@
 'use strict'
 
 const BinaryTreeNode = require('binarytreenode');
+//Private variables
+//let _private = new WeakMap();
 
 
 class BinaryTree{
 
-  constructor(value){
-    this.root = new BinaryTreeNode(value);
+  constructor(data){
+    this.root = new BinaryTreeNode(data);
   }
 
 
@@ -15,7 +17,7 @@ class BinaryTree{
     let targetNode = null;
     //Uses pre-order transversal
     function search(node){
-      if(node.value === targetValue){ targetNode = node; }
+      if(node.data === targetValue){ targetNode = node; }
       if(node.left && !targetNode){ search(node.left) };
       if(node.right && !targetNode){ search(node.right) };
     }
@@ -24,16 +26,16 @@ class BinaryTree{
   }
 
 
-  insert(value, position, parentNode){
+  insert(data, position, parentNode){
     const DEFAULT_LEAF_POSITION = 'LEFT';
     position = position.toUpperCase() || DEFAULT_LEAF_POSITION;
     parentNode = parentNode || this.root;
     switch(position){
       case 'LEFT':
-        parentNode.insertLeft(value);
+        parentNode.insertLeft(data);
         return parentNode.left;
       case 'RIGHT':
-        parentNode.insertRight(value);
+        parentNode.insertRight(data);
         return parentNode.right;
       default:
         console.error(`Invalid position ${position}, arg must be 'left' or 'right'`);
@@ -52,7 +54,7 @@ class BinaryTree{
       let nodesInLevel = queue.length;
       while(nodesInLevel){
         let currentNode = queue.shift();
-        array.push(currentNode.value);
+        array.push(currentNode.data);
         if(currentNode.left){ queue.push(currentNode.left) }
         if(currentNode.right){ queue.push(currentNode.right); }
         nodesInLevel--;
@@ -75,7 +77,7 @@ class BinaryTree{
       let level = queue.length;
       while(level){
         var currentNode = queue.shift();
-        stack.push(currentNode.value);
+        stack.push(currentNode.data);
         if(currentNode.left){ queue.push(currentNode.left) }
         if(currentNode.right){ queue.push(currentNode.right); }
         level--;
@@ -110,7 +112,7 @@ class BinaryTree{
     invalidInput = invalidInput && transversalOrder !== POST;
     //If transversal transversalOrder arg is not a string, use default order
     if(invalidInput){
-      console.warn(`BinaryTree.DFS() argument must be a string of value
+      console.warn(`BinaryTree.DFS() argument must be a string of data
       'PREORDER', 'INORDER', or 'POSTORDER'. You passed '${transversalOrder}'.
       Defaulting to '${DEFAULT}'`);
       transversalOrder = DEFAULT;
@@ -122,11 +124,11 @@ class BinaryTree{
     //////////
     function search(node){
       if(node === null) return;
-      if(transversalOrder === PRE){ order.push(node.value); }
+      if(transversalOrder === PRE){ order.push(node.data); }
       if(node.left){ search(node.left) }
-      if(transversalOrder === IN){ order.push(node.value); }
+      if(transversalOrder === IN){ order.push(node.data); }
       if(node.right){ search(node.right) }
-      if(transversalOrder === POST){ order.push(node.value); }
+      if(transversalOrder === POST){ order.push(node.data); }
     }
     search(this.root);
     return order;
@@ -159,20 +161,20 @@ class BinaryTree{
   }
 
 
-  //Finds the path to the value provided.
-  getPathTo(value, search){
+  //Finds the path to the data provided.
+  getPathTo(data, search){
     var ancestors = [];
     function search(node){
       //Null nodes cannot be the target, return false
       if(!node){ return false; }
 
-      let isMatch = node.value === value;
+      let isMatch = node.data === data;
       if(isMatch){ return true; }
 
-      //If current node's left/right is target value
+      //If current node's left/right is target data
       if(search(node.left) || search(node.right)){
-        //Enqueue current node value
-        ancestors.unshift(node.value);
+        //Enqueue current node data
+        ancestors.unshift(node.data);
         return true;
       }
     }
@@ -189,7 +191,7 @@ class BinaryTree{
         //If incorrect input, return null
         if(!node || !a || !b){ return null }
         //If a or b is found, return node reference
-        if(a === node.value || b === node.value){ return node; }
+        if(a === node.data || b === node.data){ return node; }
 
         // PRE-ORDER TRASVERSAL
         var left = search(node.left, a, b);
@@ -201,22 +203,22 @@ class BinaryTree{
         //Otherwise, check if left/right subtree is LCA
         return left? left : right;
       }
-      return search(this.root, a, b).value;
+      return search(this.root, a, b).data;
     }
     else {return null}
   }
 
 
   reverse(){
-    var reversedTree = new BinaryTree(this.root.value);
+    var reversedTree = new BinaryTree(this.root.data);
     function search(node, reversedNode){
       if(node === null){return null}
       if(node.left){
-        reversedNode.insertRight(node.left.value);
+        reversedNode.insertRight(node.left.data);
         search(node.left, reversedNode.right)
       }
       if(node.right){
-        reversedNode.insertLeft(node.right.value);
+        reversedNode.insertLeft(node.right.data);
         search(node.right, reversedNode.left)
       }
     }

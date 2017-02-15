@@ -20,6 +20,6 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
-    "binarytreenode": "^1.0.1"
+    "binarytreenode": "^0.3.1"
   }
 }

@@ -20,6 +20,7 @@ let gNode = alphabetTree.insert('G', 'right', alphabetTree.root);
 let iNode = alphabetTree.insert('I', 'right', gNode);
 let hNode = alphabetTree.insert('H', 'left', iNode);
 
+
 //Correct outputs
 const CORRECT_A_PATH = ['F','B'];
 const CORRECT_E_PATH = ['F','B','D'];
@@ -51,6 +52,7 @@ describe('BinaryTree', function() {
       assert.deepStrictEqual(alphabetTree.postOrder(),CORRECT_DFS_POSTORDER);
     });
   });
+
 
   describe('#BFS()', function() {
     it('should return an array of node values by breath order', function() {
