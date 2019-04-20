@@ -1,6 +1,6 @@
 'use strict'
 
-const BinaryTreeNode = require('binarytreenode');
+const BinaryTreeNode = require('dc-binary-tree-node');
 //Private variables
 //let _private = new WeakMap();
 
@@ -10,8 +10,6 @@ class BinaryTree{
   constructor(data){
     this.root = new BinaryTreeNode(data);
   }
-
-
 
   getNode(targetValue){
     let targetNode = null;
@@ -32,10 +30,10 @@ class BinaryTree{
     parentNode = parentNode || this.root;
     switch(position){
       case 'LEFT':
-        parentNode.insertLeft(data);
+        parentNode.left = data;
         return parentNode.left;
       case 'RIGHT':
-        parentNode.insertRight(data);
+        parentNode.right = data;
         return parentNode.right;
       default:
         console.error(`Invalid position ${position}, arg must be 'left' or 'right'`);
@@ -214,11 +212,11 @@ class BinaryTree{
     function search(node, reversedNode){
       if(node === null){return null}
       if(node.left){
-        reversedNode.insertRight(node.left.data);
+        reversedNode.right = node.left.data;
         search(node.left, reversedNode.right)
       }
       if(node.right){
-        reversedNode.insertLeft(node.right.data);
+        reversedNode.left = node.right.data;
         search(node.right, reversedNode.left)
       }
     }
